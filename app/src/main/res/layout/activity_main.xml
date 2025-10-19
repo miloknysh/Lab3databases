@@ -34,9 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:minHeight="50dp"
             android:hint="@string/product_price"
-            android:inputType="number" />
+            android:inputType="numberDecimal"
+            android:minHeight="50dp" />
+
     </LinearLayout>
 
     <LinearLayout

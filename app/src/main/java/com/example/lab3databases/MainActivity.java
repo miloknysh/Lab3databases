@@ -67,14 +67,44 @@ public class MainActivity extends AppCompatActivity {
         findBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Find product", Toast.LENGTH_SHORT).show();
+
+                if ((productName.getText().toString()).compareTo("") > 0 && (productPrice.getText().toString()).compareTo("") > 0 ){
+                    String name = productName.getText().toString();
+                    Double price = Double.parseDouble(productPrice.getText().toString());
+                    Product product = new Product(name, price);
+                    viewFoundProducts(product);
+                }
+                else if ((productName.getText().toString()).compareTo("") > 0){
+                    String name = productName.getText().toString();
+                    viewFoundProducts(name);
+                }
+                else if ((productPrice.getText().toString()).compareTo("") > 0 ){
+                    Double price = Double.parseDouble(productPrice.getText().toString());
+                    viewFoundProducts(price);
+                }
+
+                //String name = productName.getText().toString();
+                //Double price = Double.parseDouble(productPrice.getText().toString());
+                //Product product = new Product(name, price);
+                //viewFoundProducts(product);
+
+                productName.setText("");
+                productPrice.setText("");
+
+                //Toast.makeText(MainActivity.this, "Find product", Toast.LENGTH_SHORT).show();
             }
         });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Delete product", Toast.LENGTH_SHORT).show();
+                String name = productName.getText().toString();
+                dbHandler.deleteProduct(name);
+
+                productName.setText("");
+                productPrice.setText("");
+                viewProducts();
+                //Toast.makeText(MainActivity.this, "Delete product", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -82,9 +112,55 @@ public class MainActivity extends AppCompatActivity {
         viewProducts();
     }
 
+
     private void viewProducts() {
         productList.clear();
         Cursor cursor = dbHandler.getData();
+        if (cursor.getCount() == 0) {
+            Toast.makeText(MainActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                productList.add(cursor.getString(1) + " (" +cursor.getString(2)+")");
+            }
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productList);
+        productListView.setAdapter(adapter);
+    }
+
+    private void viewFoundProducts(String name){
+        productList.clear();
+        Cursor cursor = dbHandler.findProduct(name);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(MainActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                productList.add(cursor.getString(1) + " (" +cursor.getString(2)+")");
+            }
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productList);
+        productListView.setAdapter(adapter);
+    }
+
+    private void viewFoundProducts(Double price){
+        productList.clear();
+        Cursor cursor = dbHandler.findProduct(price);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(MainActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
+        } else {
+            while (cursor.moveToNext()) {
+                productList.add(cursor.getString(1) + " (" +cursor.getString(2)+")");
+            }
+        }
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productList);
+        productListView.setAdapter(adapter);
+    }
+
+    private void viewFoundProducts(Product product){
+        productList.clear();
+        Cursor cursor = dbHandler.findProduct(product);
         if (cursor.getCount() == 0) {
             Toast.makeText(MainActivity.this, "Nothing to show", Toast.LENGTH_SHORT).show();
         } else {
