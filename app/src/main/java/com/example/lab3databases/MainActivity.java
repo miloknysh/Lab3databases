@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     viewProducts();
                 } catch(Exception e){
                     Toast.makeText(MainActivity.this, "Error adding product", Toast.LENGTH_SHORT).show();
+                    viewProducts();
                 }
             }
         });
@@ -86,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
                 else if ((productPrice.getText().toString()).compareTo("") > 0 ){
                     Double price = Double.parseDouble(productPrice.getText().toString());
                     viewFoundProducts(price);
+                }
+
+                else{
+                    viewProducts();
                 }
 
                 //String name = productName.getText().toString();
