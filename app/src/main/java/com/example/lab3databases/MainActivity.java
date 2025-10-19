@@ -51,16 +51,21 @@ public class MainActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = productName.getText().toString();
-                double price = Double.parseDouble(productPrice.getText().toString());
-                Product product = new Product(name, price);
-                dbHandler.addProduct(product);
 
-                productName.setText("");
-                productPrice.setText("");
+                try{
+                    String name = productName.getText().toString();
+                    double price = Double.parseDouble(productPrice.getText().toString());
+                    Product product = new Product(name, price);
+                    dbHandler.addProduct(product);
 
-                //Toast.makeText(MainActivity.this, "Add product", Toast.LENGTH_SHORT).show();
-                viewProducts();
+                    productName.setText("");
+                    productPrice.setText("");
+
+                    //Toast.makeText(MainActivity.this, "Add product", Toast.LENGTH_SHORT).show();
+                    viewProducts();
+                } catch(Exception e){
+                    Toast.makeText(MainActivity.this, "Error adding product", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
